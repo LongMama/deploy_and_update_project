@@ -1,0 +1,78 @@
+---
+
+# Block for Debian
+- block:
+  - name: Install packages for Debian
+    apt: name={{ item }} state=latest
+    loop:
+      - python3-pip
+      - python3-dev
+      - libpq-dev
+      - postgresql
+      - postgresql-contrib
+      - nginx
+      - git
+      - snapd
+
+  - name: Install psycopg2 for ansible postgres module
+    shell: pip3 install psycopg2
+
+  when: ansible_os_family == 'Debian'
+
+# Block for RedHat
+- block:
+  - name: Adding EPEL
+    shell: |
+      yum install epel-release -y
+      yum upgrade -y
+
+  - name: Install packages for RedHat
+    yum: name={{ item }} state=latest
+    loop:
+      - python3-pip
+      - python3-devel
+      - python-psycopg2
+      - nginx
+      - git
+      - snapd
+
+  - name: Enable snapd
+    service:
+      name   : snapd.socket
+      state  : started
+      enabled: yes
+
+  - name: Create a symbolic link for snap
+    file:
+      src  : /var/lib/snapd/snap
+      dest : /snap
+      state: link
+
+  - name: Install Postgresql
+    shell: |
+      yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+      yum install -y yum-utils centos-release-scl-rh
+      yum-config-manager --disable centos-sclo-rh
+      yum --enablerepo=centos-sclo-rh install -y llvm-toolset-7-clang
+      yum install -y postgresql13 postgresql13-server postgresql13-contrib
+
+  - name: Change pgsql-directory's owner
+    file:
+      path: /usr/pgsql-13/
+      owner: postgres
+      recurse: yes
+
+  - name: Create directory for pgsql
+    file:
+      path : /usr/local/pgsql/
+      state: directory
+      owner: postgres
+
+  - name: initdb and create cluster
+    become: yes
+    become_user: postgres
+    shell: |
+      /usr/pgsql-13/bin/initdb -D /usr/local/pgsql/data
+      /usr/pgsql-13/bin/pg_ctl -D /usr/local/pgsql/data -l logfile start
+
+  when: ansible_os_family == 'RedHat'

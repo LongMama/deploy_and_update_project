@@ -1,0 +1,4 @@
+- name: Restart gunicorn.service
+  service:
+    name: "{{ repo }}.service"
+    state: restarted

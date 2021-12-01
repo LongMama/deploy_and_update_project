@@ -1,0 +1,10 @@
+---
+
+- name: Add fingerprint in ssh/known_hosts
+  shell: ssh-keygen -F gitlab.com || ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+
+- name: Clone from git
+  git:
+    repo   : "{{ git_url }}"
+    dest   : "{{ dest_folder }}{{ repo }}"
+    version: "{{ branch }}"

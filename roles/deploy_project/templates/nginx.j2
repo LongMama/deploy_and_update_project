@@ -1,0 +1,15 @@
+server {
+    listen 80;
+    server_name {{ domain }};
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+
+    location ~ ^/(static|media)/ {
+        root {{ dest_folder }}{{ repo }};
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:{{ dest_folder }}{{ repo }}/{{ repo }}.sock;
+   }
+}

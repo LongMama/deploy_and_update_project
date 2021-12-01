@@ -1,0 +1,21 @@
+---
+
+- block:
+  - name: Change file ownership, group and permissions for Debian
+    file:
+      path   : "{{ dest_folder }}/{{ repo }}"
+      owner  : www-data
+      group  : www-data
+      mode   : '0755'
+      recurse: yes
+  when: ansible_os_family == 'Debian'
+
+- block:
+  - name: Change file ownership, group and permissions for RedHat
+    file:
+      path   : "{{ dest_folder }}/{{ repo }}"
+      owner  : nginx
+      group  : nginx
+      mode   : '0755'
+      recurse: yes
+  when: ansible_os_family == 'RedHat'

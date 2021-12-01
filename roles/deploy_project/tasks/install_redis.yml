@@ -1,0 +1,35 @@
+---
+
+# Block for Debian
+- block:
+  - name: Install redis for Debian
+    apt: name=redis-server state=latest
+
+  - name: Configuration redis.service
+    lineinfile:
+      path        : /etc/systemd/system/redis.service
+      line        : "{{ item }}"
+      insertbefore: "PIDFile"
+    loop:
+      - 'ExecStop=/bin/kill -s TERM $MAINPID'
+      - 'ExecStartPost=/bin/sh -c "echo $MAINPID > /var/run/redis/redis.pid"'
+
+  - name: Restart redis.service
+    service:
+      name         : redis.service
+      state        : restarted
+      enabled      : yes
+      daemon-reload: yes
+  when: ansible_os_family == 'Debian'
+
+- block:
+  - name: Install redis for RedHat
+    apt: name=redis state=latest
+
+  - name: Start and enable redis.service
+    service:
+      name         : redis.service
+      state        : started
+      enabled      : yes
+      daemon-reload: yes
+  when: ansible_os_family == 'RedHat'

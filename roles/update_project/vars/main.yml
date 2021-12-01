@@ -1,0 +1,9 @@
+---
+# vars file for update_project
+
+dest_folder                : /var/www/html/
+repo                       : _
+git_url                    : _
+env_example                : env
+local_file                 : _
+requirements               : _

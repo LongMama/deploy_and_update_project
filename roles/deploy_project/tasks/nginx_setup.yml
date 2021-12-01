@@ -1,0 +1,34 @@
+---
+
+# Block for Debian
+- block:
+  - name: Generate nginx.conf
+    template:
+      src : "{{ templates_folder }}nginx.j2"
+      dest: "{{ dest_nginx_folder_debian }}{{ repo }}.conf"
+
+  - name: Create a link from nginx/sites-available to sites-enabled
+    shell: ln -s "{{ dest_nginx_folder_debian }}""{{ repo }}".conf /etc/nginx/sites-enabled/
+    ignore_errors: yes
+
+  - name: Remove default_nginx_conf
+    file:
+      path: /etc/nginx/sites-enabled/default
+      state: absent
+
+  when: ansible_os_family == 'Debian'
+
+# Block for RedHat
+- block:
+  - name: Generate nginx.conf
+    template:
+      src : "{{ templates_folder }}nginx.j2"
+      dest: "{{ dest_nginx_folder_redhat }}{{ repo }}.conf"
+
+
+  when: ansible_os_family == 'RedHat'
+
+- name:  Reload the nginx-service
+  systemd:
+    name : nginx
+    state: reloaded

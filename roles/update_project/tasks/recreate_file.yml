@@ -1,0 +1,4 @@
+- name: Recreate the env file
+  copy:
+    src : env_example
+    dest: "{{ dest_folder }}{{ repo }}/.envs/.env"

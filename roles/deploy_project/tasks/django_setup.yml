@@ -1,0 +1,24 @@
+---
+
+- name: Create venv and install requirements
+  shell: |
+    pip3 install virtualenv
+    virtualenv {{ dest_folder }}{{ repo }}/.venv
+    {{ dest_folder }}{{ repo }}/.venv/bin/pip3 install -r {{ dest_folder }}{{ repo }}{{ requirements }}
+    {{ dest_folder }}{{ repo }}/.venv/bin/pip3 install django-debug-toolbar
+
+- name: migrate
+  shell: |
+    export $(grep -v "^#" {{ dest_folder }}{{ repo }}/.envs/.env |xargs)
+    {{ dest_folder }}{{ repo }}/.venv/bin/python3 {{ dest_folder }}{{ repo }}/manage.py migrate
+
+- name: collectstatic
+  shell: |
+    export $(grep -v "^#" {{ dest_folder }}{{ repo }}/.envs/.env |xargs)
+    {{ dest_folder }}{{ repo }}/.venv/bin/python3 {{ dest_folder }}{{ repo }}/manage.py collectstatic --noinput
+
+- name: createsuperuser
+  shell: |
+    export $(grep -v "^#" {{ dest_folder }}{{ repo }}/.envs/.env |xargs)
+    echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('{{ django_login }}', '{{ django_password }}')" | {{ dest_folder }}{{ repo }}/.venv/bin/python3 {{ dest_folder }}{{ repo }}/manage.py shell
+  ignore_errors: yes

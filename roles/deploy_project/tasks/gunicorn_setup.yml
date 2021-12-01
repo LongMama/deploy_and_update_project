@@ -1,0 +1,22 @@
+---
+
+- block:
+  - name: Generate gunicorn.service for Debian
+    template:
+      src : "{{ templates_folder }}gunicorn_service_debian.j2"
+      dest: "{{ dest_services_folder }}{{ repo }}.service"
+  when: ansible_os_family == 'Debian'
+
+- block:
+  - name: Generate gunicorn.service for RedHat
+    template:
+      src : "{{ templates_folder }}gunicorn_service_redhat.j2"
+      dest: "{{ dest_services_folder }}{{ repo }}.service"
+  when: ansible_os_family == 'RedHat'
+
+- name: Start and enable the service
+  service:
+    name         : "{{ repo }}.service"
+    state        : started
+    enabled      : yes
+    daemon-reload: yes

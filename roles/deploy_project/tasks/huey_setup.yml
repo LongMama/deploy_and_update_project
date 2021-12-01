@@ -1,0 +1,24 @@
+---
+
+- import_tasks: install_redis.yml
+
+- block:
+  - name: Generate huey.service for Debian
+    template:
+      src : "{{ templates_folder }}huey_service_debian.j2"
+      dest: "{{ dest_services_folder }}{{ repo }}_huey.service"
+  when: ansible_os_family == 'Debian'
+
+- block:
+  - name: Generate huey.service for RedHat
+    template:
+      src : "{{ templates_folder }}huey_service_redhat.j2"
+      dest: "{{ dest_services_folder }}{{ repo }}_huey.service"
+  when: ansible_os_family == 'RedHat'
+
+- name: Start and enable huey.service
+  service:
+    name         : "{{ repo }}_huey.service"
+    state        : started
+    enabled      : yes
+    daemon-reload: yes

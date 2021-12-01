@@ -1,0 +1,21 @@
+---
+# vars file for deploy_project
+
+templates_folder           : ../templates/
+dest_nginx_folder_debian   : /etc/nginx/sites-available/
+dest_nginx_folder_redhat   : /etc/nginx/conf.d/
+dest_services_folder       : /etc/systemd/system/
+dest_folder                : /var/www/html/
+###############################################################################
+repo                       : _
+branch                     : _
+git_url                    : _
+domain                     : _
+dest_local_file            : _
+django_login               : _
+django_password            : _
+requirements               : _
+env                        : true
+local                      : false
+celery                     : false
+huey                       : false

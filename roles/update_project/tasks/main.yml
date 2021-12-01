@@ -1,0 +1,20 @@
+---
+# tasks file for update_project
+
+- import_tasks: git_pull.yml
+
+- import_tasks: recreate_file.yml
+
+- import_tasks: pip_install_requirements.yml
+
+- import_tasks: django_restart.yml
+
+- import_tasks: restart_gunicorn_service.yml
+
+- import_tasks: restart_celery_service.yml
+  when: celery
+
+- import_tasks: restart_celery_service.yml
+  when: huey
+
+...

@@ -1,0 +1,13 @@
+---
+
+- block:
+  - name: Update repositories for Debian
+    shell: apt update
+    ignore_errors: yes
+  when: ansible_os_family == 'Debian'
+
+- block:
+  - name: Update repositories for RedHat
+    shell: yum update -y
+    ignore_errors: yes
+  when: ansible_os_family == 'RedHat'

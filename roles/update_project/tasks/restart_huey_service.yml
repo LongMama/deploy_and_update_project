@@ -1,0 +1,4 @@
+- name: Restart huey.service
+  service:
+    name: "{{ repo }}_huey.service"
+    state: restarted

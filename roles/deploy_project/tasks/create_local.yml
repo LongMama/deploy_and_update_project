@@ -1,0 +1,4 @@
+- name: Create the local.py file
+  copy:
+    src : local.py
+    dest: "{{ dest_folder }}{{ repo }}{{ dest_local_file }}/local.py"

@@ -1,0 +1,9 @@
+- name: migrate
+  shell: |
+    export $(grep -v "^#" {{ dest_folder }}{{ repo }}/.envs/.env |xargs)
+    {{ dest_folder }}{{ repo }}/.venv/bin/python3 {{ dest_folder }}{{ repo }}/manage.py migrate
+
+- name: collectstatic
+  shell: |
+    export $(grep -v "^#" {{ dest_folder }}{{ repo }}/.envs/.env |xargs)
+    {{ dest_folder }}{{ repo }}/.venv/bin/python3 {{ dest_folder }}{{ repo }}/manage.py collectstatic --noinput

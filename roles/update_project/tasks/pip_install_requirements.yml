@@ -1,0 +1,3 @@
+- name: Install requirements
+  shell: |
+    {{ dest_folder }}{{ repo }}/.venv/bin/pip3 install -r {{ dest_folder }}{{ repo }}{{ requirements }}

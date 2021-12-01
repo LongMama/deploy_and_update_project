@@ -1,0 +1,18 @@
+---
+
+- name: Install certbot via snap
+  snap:
+    name   : certbot
+    classic: true
+  retries: 3
+  delay  : 3
+
+- name: Create a symbolic link for certbot
+  file:
+    src  : /snap/bin/certbot
+    dest : /usr/bin/certbot
+    state: link
+
+- name: Get the sertificate via Certbot
+  shell: certbot --nginx --non-interactive --agree-tos -m admin@admin.com --domains "{{ domain }}"
+  ignore_errors: yes

@@ -1,0 +1,9 @@
+---
+- name        : Deploying project
+  hosts       : _
+  become      : no
+  gather_facts: yes
+
+  roles:
+    - { role: deploy_project }
+

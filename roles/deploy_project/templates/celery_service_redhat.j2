@@ -1,0 +1,13 @@
+[Unit]
+Description=Celery Service
+After=network.target
+
+[Service]
+User=nginx
+Group=nginx
+EnvironmentFile=/var/www/html/{{ repo }}/.envs/.env
+WorkingDirectory=/var/www/html/{{ repo }}/
+ExecStart=/var/www/html/{{ repo }}/.venv/bin/celery worker -A {{ repo }}.celeryconf
+
+[Install]
+WantedBy=multi-user.target

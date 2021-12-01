@@ -1,0 +1,35 @@
+---
+
+- import_tasks: update_locale.yml
+
+- import_tasks: update_repositories.yml
+
+- import_tasks: install_packages.yml
+
+- import_tasks: git_clone.yml
+
+- import_tasks: create_env.yml
+  when: env
+
+- import_tasks: create_local.yml
+  when: local
+
+- import_tasks: postgres_settings.yml
+
+- import_tasks: django_setup.yml
+
+- import_tasks: change_permissions_and_owner.yml
+
+- import_tasks: celery_setup.yml
+  when: celery
+
+- import_tasks: huey_setup.yml
+  when: huey
+
+- import_tasks: nginx_setup.yml
+
+- import_tasks: gunicorn_setup.yml
+
+- import_tasks: certbot_setup.yml
+
+...

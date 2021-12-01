@@ -1,0 +1,5 @@
+- name: Git pull
+  git:
+    repo   : "{{ git_url }}"
+    dest   : "{{ dest_folder }}{{ repo }}"
+    update: yes

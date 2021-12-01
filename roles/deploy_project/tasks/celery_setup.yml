@@ -1,0 +1,24 @@
+---
+
+- import_tasks: install_redis.yml
+
+- block:
+  - name: Generate celery.service for Debian
+    template:
+      src : "{{ templates_folder }}celery_service_debian.j2"
+      dest: "{{ dest_services_folder }}{{ repo }}_celery.service"
+  when: ansible_os_family == 'Debian'
+
+- block:
+  - name: Generate celery.service for RedHat
+    template:
+      src : "{{ templates_folder }}celery_service_redhat.j2"
+      dest: "{{ dest_services_folder }}{{ repo }}_celery.service"
+  when: ansible_os_family == 'RedHat'
+
+- name: Start and enable celery.service
+  service:
+    name         : "{{ repo }}_celery.service"
+    state        : started
+    enabled      : yes
+    daemon-reload: yes

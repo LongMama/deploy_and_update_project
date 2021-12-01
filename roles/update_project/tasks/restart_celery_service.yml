@@ -1,0 +1,4 @@
+- name: Restart celery.service
+  service:
+    name: "{{ repo }}_celery.service"
+    state: restarted
